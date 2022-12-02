@@ -11,17 +11,13 @@ class SpirvLlvmTranslator(CMakePackage):
     maintainers = ['rothpc@ornl.gov']
 
     version('15.0.0', tag='v15.0.0')
+    version('14.0.0', tag='v14.0.0')
 
     variant('tools', default=True, description='Integrate SPIRV-Tools')
 
     depends_on('llvm@15', when='@15.0.0')
+    depends_on('llvm@14', when='@14.0.0')
     depends_on('spirv-tools', when='+tools')
-
-    resource(
-            name='spirv-headers',
-            git='https://github.com/KhronosGroup/SPIRV-Headers',
-            destination='external'
-    )
 
     def setup_build_environment(self, env):
         if '+tools' in self.spec:
