@@ -23,3 +23,18 @@ class SpirvLlvmTranslator(CMakePackage):
         if '+tools' in self.spec:
             env.append_path("PKG_CONFIG_PATH", self.spec['spirv-tools'].prefix.lib.pkgconfig)
 
+    def setup_run_environment(self, env):
+        env.prepend_path('PATH', self.prefix.bin)
+
+    @run_after('build')
+    def build_llvm_spirv(self):
+        with working_dir(self.build_directory):
+            make('llvm-spirv')
+
+    @run_after('install')
+    def install_llvm_spirv(self):
+        mkdirp(self.prefix.bin)
+        with working_dir(self.build_directory):
+            install('tools/llvm-spirv/llvm-spirv', self.prefix.bin)
+
+
