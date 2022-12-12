@@ -6,8 +6,10 @@ class Pocl(BuiltinPocl):
     version('3.1', tag='v3.1')
 
     variant('spirv', default=False, description='Support SPIR-V')
+    variant('cuda', default=False, description='Enable CUDA support')
 
     depends_on('spirv-llvm-translator', when='+spirv')
+    depends_on('cuda', when='+cuda')
 
     def cmake_args(self):
         args = BuiltinPocl.cmake_args(self)
@@ -17,6 +19,11 @@ class Pocl(BuiltinPocl):
                 '-DENABLE_SPIR=ON',
                 '-DENABLE_SPIRV=ON',
                 f'-DLLVM_SPIRV={join_path(self.spec["spirv-llvm-translator"].prefix.bin, "llvm-spirv")}'
+            ])
+
+        if '+cuda' in self.spec:
+            args.extend([
+                '-DENABLE_CUDA=ON'
             ])
         
         return args
