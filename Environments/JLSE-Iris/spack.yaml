@@ -1,0 +1,27 @@
+spack:
+  definitions:
+  - compilers: [clang@15.0.6]
+  - packages:
+    - spirv-tools
+    - spirv-llvm-translator@15+tools
+    - chip-spv@main +interop
+  specs:
+  - matrix:
+    - [$packages]
+    - [$%compilers]
+  - llvm@15.0.6
+  view: false
+  concretizer:
+    unify: true
+    reuse: true
+  packages:
+    cmake:
+      require: '%gcc'
+    opencl-headers:
+      require: '%clang'
+    opencl-clhpp:
+      require: '%clang'
+    oneapi-level-zero:
+      require: '%clang'
+  repos:
+  - ../../Repo
