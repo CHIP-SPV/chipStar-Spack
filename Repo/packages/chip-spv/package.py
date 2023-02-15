@@ -30,6 +30,7 @@ class ChipSpv(CMakePackage):
     depends_on('intel-oneapi-compilers', when='+interop')
     depends_on('intel-oneapi-mkl', when='+interop')
 
+    patch('sycl_hip_interop-lz-noocl.patch', when='+interop backend=level_zero')
 
     def cmake_args(self):
 
