@@ -4,7 +4,7 @@ spack:
   - packages:
     - spirv-tools
     - spirv-llvm-translator@15+tools
-    - chip-spv@main +interop
+    - chip-spv@main +interop backend=level_zero
   specs:
   - intel-oneapi-compilers
   - intel-oneapi-mkl ^intel-oneapi-tbb
