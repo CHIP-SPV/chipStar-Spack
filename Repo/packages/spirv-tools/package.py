@@ -1,3 +1,5 @@
+# Copyright 2022-2023 UT-Battelle
+# See LICENSE.txt in the root of the source distribution for license info.
 import sys
 from spack import *
 
