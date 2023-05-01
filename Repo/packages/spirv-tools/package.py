@@ -32,7 +32,7 @@ class SpirvTools(CMakePackage):
 
     resource(
             name='spirv-headers',
-            git='https://github.com/KhronosGroup/SPIRV-Headers',
+            git='https://github.com/KhronosGroup/spirv-headers',
             destination='external'
     )
     resource(
