@@ -2,15 +2,10 @@
 # See LICENSE.txt in the root of the source distribution for license info.
 spack:
   definitions:
-  - compilers: [clang@15.0.7]
+  - compilers: [clang@16.0.2]
   - packages:
-    - spirv-tools
-    - spirv-llvm-translator@15+tools
     - chip-spv@main +interop backend=level_zero
   specs:
-  - intel-oneapi-compilers
-  - intel-oneapi-mkl ^intel-oneapi-tbb
-  - llvm@15.0.7
   - matrix:
     - [$packages]
     - [$%compilers]
@@ -18,14 +13,15 @@ spack:
   concretizer:
     unify: true
     reuse: true
-  packages:
-    opencl-headers:
-      require: '%clang'
-    opencl-clhpp:
-      require: '%clang'
-    oneapi-level-zero:
-      require: '%clang'
-    intel-oneapi-compilers:
-      require: '%gcc'
   repos:
   - ../../Repo
+  packages:
+    spirv-tools:
+      require: 'cxxstd=17 %clang'
+    spirv-llvm-translator:
+      require: '+tools %clang'
+    intel-oneapi-compilers:
+      require: '%gcc'
+    intel-oneapi-mkl:
+      require: '^intel-oneapi-tbb'
+
