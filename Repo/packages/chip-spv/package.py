@@ -23,16 +23,18 @@ class ChipSpv(CMakePackage):
 
     variant('interop', description='Whether to build SYCL interoperability tests', default=True)
 
-    depends_on('spirv-llvm-translator@15', when='^llvm@15')
-    depends_on('spirv-llvm-translator@14', when='^llvm@14')
+    for supported_version in [14, 15, 16]:
+        with when(f'%clang@{supported_version}:{supported_version}.999'):
+            depends_on(f'llvm@{supported_version}')
+            depends_on(f'spirv-llvm-translator@{supported_version}')
 
     depends_on('oneapi-level-zero', when='backend=level_zero')
     depends_on('ocl-icd', when='backend=opencl')
 
-    depends_on('intel-oneapi-compilers', when='+interop')
-    depends_on('intel-oneapi-mkl', when='+interop')
+    with when('+interop'):
+        depends_on('intel-oneapi-compilers')
+        depends_on('intel-oneapi-mkl')
 
-    patch('sycl_hip_interop-lz-noocl.patch', when='+interop backend=level_zero')
 
     def cmake_args(self):
 
@@ -44,4 +46,17 @@ class ChipSpv(CMakePackage):
         ]
 
         return args
+
+
+    def setup_build_environment(self, env):
+
+        if self.spec.satisfies('+interop'):
+            # We want to build the HIP-SYCL interop examples,
+            # but just depending on the OneAPI compiler and MKL packages
+            # isn't enough for this project's CMake scripts to decide
+            # that it has the support it needs to build those examples.
+            # Update the environment so CMake will find them.
+            env.set('MKLROOT', self.spec['intel-oneapi-mkl'].prefix)
+            env.prepend_path('PATH',
+                join_path(self.spec['intel-oneapi-compilers'].prefix, 'compiler', 'latest', 'linux', 'bin'))
 

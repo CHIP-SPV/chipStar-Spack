@@ -38,16 +38,19 @@ class SpirvTools(CMakePackage):
     resource(
             name='re2',
             git='https://github.com/google/re2',
+            tag='2023-03-01',
             destination='external'
     )
     resource(
             name='effcee',
             git='https://github.com/google/effcee',
+            # tag='v2019.1',    # Can't use even this newest tag because it hardcodes C++11, which breaks re2.
             destination='external'
     )
     resource(
             name='googletest',
             git='https://github.com/google/googletest',
+            tag='v1.13.0',
             destination='external'
     )
 
@@ -56,6 +59,7 @@ class SpirvTools(CMakePackage):
         args = [
             self.define_from_variant('CMAKE_CXX_STANDARD', 'cxxstd'),
             '-DCMAKE_CXX_EXTENSIONS=OFF',
+            '-DCMAKE_CXX_STANDARD_REQUIRED=ON',
         ]
 
         return args
