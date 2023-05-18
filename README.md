@@ -25,10 +25,12 @@ the environment targeting the OpenCL backend to work.
 * An x86_64 system running a common Linux distribution.  OpenSLES 15 is
   the best tested to date.
 * A working Spack installation.
-* Clang 15.x installed and registered as a Spack compiler.  Installing
-  this compiler via Spack (i.e., by installing a package like `llvm@15.0.7`,
-  and then using `spack compiler add`) is the approach that is currently
-  best tested.
+* A recent Clang version installed and registered as a Spack compiler.
+  Versions 15 and 16 are best tested, but 14 might work.  We suggest
+  installing the compiler via Spack (i.e., by installing something like
+  `llvm@16.0.2` and then using `spack compiler add` with the llvm
+  package's install location), because the `chip-spv` package defined
+  in this repository depends on the `llvm` package anyway.
 
 # Usage
 
@@ -38,44 +40,80 @@ the environment targeting the OpenCL backend to work.
 $ git clone https://github.com/CHIP-SPV/CHIP-SPV-Spack
 ```
 
-1. Verify that the compiler version is correctly represented in the
-   desired environment's `spack.yaml` file.  For instance, if the Clang
-   compiler to be used is version 15.0.7, ensure that the version
-   numbers for the `compilers` definition, the `llvm` spec, and
-   the `spirv-llvm-translator` spec are consistent.  In this instance,
-   these should be `clang@15.0.7`, `llvm@15.0.7` and 
-   `spirv-llvm-translator@15`, respectively.
-
-2. Activate and concretize the environment.  E.g.,
+2. Activate the environment you want to build.  E.g., for the
+environment that just builds CHIP-SPV with Level Zero backend:
 
 ```bash
 $ cd CHIP-SPV-Spack/Environments/LevelZero
-$ spack activate .
-$ spack concretize -f
+$ spack env activate .
 ```
 
-3. Build the environment.
+3. Concretize the active environment.  (In Spack terminology, 
+"to concretize" means to let Spack examine the package specifications
+it has been asked to build, plus the available package repositories, 
+resolve dependencies and check constraints, and decide exactly which
+packages it will build, in which order, and with which configuration.)
+
+```bash
+$ spack concretize -f -U
+```
+
+We suggest examining the output from running the `spack concretize` 
+command to make sure that Spack's concretizer has truly decided to
+use the configuration options and especially the compilers that you
+want it to use.  Note that the environment and related configuration 
+are purposefully not overly constrained to use the given compiler
+for every dependency package, so even though there are some packages
+that must be built with `%clang`, there are others that may be
+built (or re-used from already-installed packages) using `%gcc` such
+as the system's GCC installation.
+
+If Spack's concretizer  didn't do what you want, you can re-concretize
+the environment and be more explicit about what you want using command-line
+configuration options (recommended) or by editing the environment's
+`spack.yaml` file or other configuration options that your Spack installation
+is using.  (Use `spack config blame` to see which configuration files Spack is
+using.)  For instance, if you have both `clang@16.0.2` and `clang@15.0.7`
+installed and registered as Spack compilers, and you want to build
+using `clang@15.0.7`, you may have to use a concretize command like the
+following:
+
+```bash
+$ spack -c "packages:chip-spv:require:'%clang@15.0.7'" concretize -f -U
+```
+
+As before, verify from the output of the `spack concretize` command that it
+is using the compiler version you want, `clang@15.0.7` in this example.
+
+
+4. Build the environment.
 
 ```bash
 $ spack install
 ```
-If all goes well with the build, a `spack find` with the environment
-active should show `chip-spv` available.
+Spack supports some options for controlling the build and installation,
+such as `-j` to limit the number of processes used for parallel builds,
+useful for being a good citizen on shared systems by not allowing Spack
+to use all available cores (its default).  See the Spack documentation for
+more information.
 
-4. Use the installed software.  The easiest way to use the installed
-software when compiling and running HIP code is to activate the 
-environment and then build the software.  Because other packages like
-`cmake` and `boost` are not roots in the Spack environments, they
-are not automatically added to one's environment when one activates
-the Spack environment.  To use these, one must load them before
-activating the Spack environment, or ensure that they are available
-using the `module` command.
+Assuming all goes well with the build and install, a `spack find`
+should show the packages that you just built.
 
+5. Use the installed software.  There are several ways you might
+update your environment to use the software, including:
+
+* `spack load chip-spv`
+* Activating the environment that you used to build the software
+* If your Spack configuration is such that it can generate module files
+and module files have been generated for the software you built
+via this environment, `module load chip-spv`
 
 # TODO
 
+* Clean up and verify the OpenCL-based environment.
 * Ensure the OpenCL-based environment can use any OpenCL implementation.
-* Clean up and verify the OpenCL-based environment using POCL.
-* Incorporate HIP libraries like HipBLAS into the environments.
-* Support using the software installed by the environment via `module`
+* Incorporate H4I HIP libraries like H4I-HipBLAS into an environments.
+* Support using the software installed by the environment via 
+`module` command.
 

@@ -12,15 +12,12 @@ class SpirvLlvmTranslator(CMakePackage):
     # Maintainer of the Spack package, not the software itself.
     maintainers = ['rothpc']
 
-    version('16.0.0', tag='v16.0.0')
-    version('15.0.0', tag='v15.0.0')
-    version('14.0.0', tag='v14.0.0')
+    supported_major_versions = [14, 15, 16]
+    for curr_version in supported_major_versions:
+        version(f'{curr_version}.0.0', tag=f'v{curr_version}.0.0')
+        depends_on(f'llvm@{curr_version}', when=f'@{curr_version}.0.0')
 
     variant('tools', default=True, description='Integrate SPIRV-Tools')
-
-    depends_on('llvm@16', when='@16.0.0')
-    depends_on('llvm@15', when='@15.0.0')
-    depends_on('llvm@14', when='@14.0.0')
     depends_on('spirv-tools', when='+tools')
 
     def setup_build_environment(self, env):
