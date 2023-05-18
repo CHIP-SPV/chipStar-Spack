@@ -25,12 +25,22 @@ the environment targeting the OpenCL backend to work.
 * An x86_64 system running a common Linux distribution.  OpenSLES 15 is
   the best tested to date.
 * A working Spack installation.
-* A recent Clang version installed and registered as a Spack compiler.
+* A recent Clang installation that is registered with Spack as a compiler.
   Versions 15 and 16 are best tested, but 14 might work.  We suggest
   installing the compiler via Spack (i.e., by installing something like
   `llvm@16.0.2` and then using `spack compiler add` with the llvm
   package's install location), because the `chip-spv` package defined
   in this repository depends on the `llvm` package anyway.
+* A recent (at least version 2023.1) Intel OneAPI compiler installation
+  that is registered with Spack as a compiler.  The recommended way
+  of doing this is by installing the Spack `intel-oneapi-compilers`
+  package, then registering the location of its compilers with Spack.
+  E.g., 
+
+```bash
+$ spack install intel-oneapi-compilers@2023
+$ spack compiler add $(spack location -i intel-oneapi-compilers@2023)/compiler/latest/linux
+```
 
 # Usage
 

@@ -1,6 +1,5 @@
 # Copyright 2022-2023 UT-Battelle
 # See LICENSE.txt in the root of the source distribution for license info.
-import sys
 from spack import *
 
 class H4iExttest(CMakePackage):
@@ -14,17 +13,14 @@ class H4iExttest(CMakePackage):
     version('develop', branch='develop')
     version('main', branch='main')
 
-    mkl_threading_values=('tbb_thread', 'sequential')
-    variant('mkl-threading',
-                description='Which MKL threading mode to enable',
-                values=mkl_threading_values,
-                default='tbb_thread',
-                multi=False)
+    # We need a hipblas implementation.
+    # Since hipblas is not a Spack virtual function,
+    # we condition our dependency on which implementation
+    # by whether we indirectly depend on HIP or CHIP-SPV.
+    depends_on('hipblas', when='^hip')
+    depends_on('h4i-hipblas', when='^chip-spv')
 
     depends_on('boost +program_options')
-
-    for threading_value in mkl_threading_values:
-        depends_on(f'h4i-hipblas mkl-threading={threading_value}', when=f'mkl-threading={threading_value}')
 
     # By design, we can *only* be built using %clang.
     # TODO is this really necessary?
@@ -32,12 +28,4 @@ class H4iExttest(CMakePackage):
     for curr_compiler in spack.compilers.supported_compilers():
         if curr_compiler != 'clang':
             conflicts(f'%{curr_compiler}')
-
-    def cmake_args(self):
-
-        args = [
-            self.define_from_variant('MKL_THREADING', 'mkl-threading'),
-        ]
-
-        return args
 

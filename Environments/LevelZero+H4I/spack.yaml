@@ -19,13 +19,6 @@ spack:
       require: '%gcc'
     intel-oneapi-mkl:
       require: ^intel-oneapi-tbb
-    h4i-hipblas:
-      require: ^h4i-mklshim mkl-threading=tbb_thread
-
-  develop:
     h4i-mklshim:
-      spec: h4i-mklshim@=develop
-    h4i-hipblas:
-      spec: h4i-hipblas@=develop
-    h4i-exttest:
-      spec: h4i-exttest@=develop
+      require: 'mkl-threading=tbb_thread'
+

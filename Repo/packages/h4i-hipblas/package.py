@@ -14,18 +14,8 @@ class H4iHipblas(CMakePackage):
     version('develop', branch='develop')
     version('main', branch='main')
 
-    mkl_threading_values=('tbb_thread', 'sequential')
-    variant('mkl-threading',
-                description='Which MKL threading mode to enable',
-                values=mkl_threading_values,
-                default='tbb_thread',
-                multi=False)
-
     # TODO do we need to specify that we're compiling with CHIP-SPV's hipcc?
     depends_on('chip-spv')
-
-    for threading_value in mkl_threading_values:
-        depends_on(f'h4i-mklshim mkl-threading={threading_value}', when=f'mkl-threading={threading_value}')
 
     # By design, we can *only* be built using %clang.
     # TODO is this really necessary?
@@ -33,12 +23,4 @@ class H4iHipblas(CMakePackage):
     for curr_compiler in spack.compilers.supported_compilers():
         if curr_compiler != 'clang':
             conflicts(f'%{curr_compiler}')
-
-    def cmake_args(self):
-
-        args = [
-            self.define_from_variant('MKL_THREADING', 'mkl-threading'),
-        ]
-
-        return args
 
