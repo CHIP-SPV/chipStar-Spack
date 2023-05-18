@@ -1,14 +1,8 @@
 # Copyright 2022-2023 UT-Battelle
 # See LICENSE.txt in the root of the source distribution for license info.
 spack:
-  definitions:
-  - compilers: [clang@16.0.2]
-  - packages:
-    - chip-spv@main +interop backend=level_zero
   specs:
-  - matrix:
-    - [$packages]
-    - [$%compilers]
+  - chip-spv@main +interop backend=level_zero %clang
   view: true
   concretizer:
     unify: true
