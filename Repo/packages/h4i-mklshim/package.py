@@ -9,7 +9,7 @@ class H4iMklshim(CMakePackage):
     git = 'https://github.com/CHIP-SPV/H4I-MKLShim'
 
     # Maintainer of the Spack package, not necessarily the software itself.
-    maintainers = ['rothpc@ornl.gov']
+    maintainers = ['rothpc']
 
     version('develop', branch='develop')
     version('main', branch='main')
@@ -20,23 +20,30 @@ class H4iMklshim(CMakePackage):
                 default='tbb_thread',
                 multi=False)
 
-    depends_on('intel-oneapi-compilers')
-    depends_on('intel-oneapi-mkl')  # TODO verify that the Spack-installed MKL runs code on GPUs
+    depends_on('intel-oneapi-compilers@2023:')
+    depends_on('intel-oneapi-mkl@2023:')  # TODO verify that the Spack-installed MKL runs code on GPUs
     depends_on('oneapi-level-zero')
 
-    # Wish there were an easier way to say 
-    # "only %oneapi is allowed" than to list
-    # all other potential compiler families as conflicts.
-    conflicts('%gcc')
-    conflicts('%clang')
-    conflicts('%intel')
-    # TODO add all other compiler families, or find a way to specify the
-    # way to say 'conflicted with everything *but* '%oneapi'
+    # By design, we can *only* be built using %oneapi.
+    # (At least until there are other SYCL compilers that can use the MKL
+    # library to run code on Intel GPUs.)
+    for curr_compiler in spack.compilers.supported_compilers():
+        if curr_compiler != 'oneapi':
+            conflicts(f'%{curr_compiler}')
 
     def cmake_args(self):
 
+        # We depend on intel-oneapi-compiler but don't source its script
+        # that sets environment variables.  Help CMake find the SYCL 
+        # support.
+        sycl_compiler_path = join_path(self.spec['intel-oneapi-compilers'].prefix, 'compiler', 'latest', 'linux')
+        sycl_include_dir = join_path(sycl_compiler_path, 'include', 'sycl')
+        sycl_library_dir = join_path(sycl_compiler_path, 'lib')
+
         args = [
             self.define_from_variant('MKL_THREADING', 'mkl-threading'),
+            f'-DSYCL_INCLUDE_DIR={sycl_include_dir}',
+            f'-DSYCL_LIBRARY_DIR={sycl_library_dir}'
         ]
 
         return args

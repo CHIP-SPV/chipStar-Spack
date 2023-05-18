@@ -9,30 +9,29 @@ class H4iExttest(CMakePackage):
     git = 'https://github.com/CHIP-SPV/H4I-ExtTest'
 
     # Maintainer of the Spack package, not necessarily the software itself.
-    maintainers = ['rothpc@ornl.gov']
+    maintainers = ['rothpc']
 
     version('develop', branch='develop')
     version('main', branch='main')
 
+    mkl_threading_values=('tbb_thread', 'sequential')
     variant('mkl-threading',
                 description='Which MKL threading mode to enable',
-                values=('tbb_thread', 'sequential'),
+                values=mkl_threading_values,
                 default='tbb_thread',
                 multi=False)
 
     depends_on('boost +program_options')
 
-    # TODO Is it possible to specify this dependency without having to list all potential values?
-    depends_on('h4i-hipblas mkl-threading=tbb_thread', when='mkl-threading=tbb_thread')
-    depends_on('h4i-hipblas mkl-threading=sequential', when='mkl-threading=sequential')
+    for threading_value in mkl_threading_values:
+        depends_on(f'h4i-hipblas mkl-threading={threading_value}', when=f'mkl-threading={threading_value}')
 
-    # depends_on('intel-oneapi-mkl')
-
-    # How to specify that we must be compiled with clang, without
-    # having to list all potential compiler families?
-    # Is depends_on('llvm') what we need?
-    conflicts('%gcc')
-    conflicts('%oneapi')
+    # By design, we can *only* be built using %clang.
+    # TODO is this really necessary?
+    # TODO Do we need to specify 'hipcc' from chip-spv?
+    for curr_compiler in spack.compilers.supported_compilers():
+        if curr_compiler != 'clang':
+            conflicts(f'%{curr_compiler}')
 
     def cmake_args(self):
 
