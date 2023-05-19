@@ -3,6 +3,8 @@
 spack:
   specs:
   - chip-spv@main +interop backend=level_zero %clang
+  - h4i-mklshim@develop
+  - h4i-hipblas@develop
   - h4i-exttest@develop
   view: true
   concretizer:
@@ -20,5 +22,4 @@ spack:
     intel-oneapi-mkl:
       require: ^intel-oneapi-tbb
     h4i-mklshim:
-      require: 'mkl-threading=tbb_thread'
-
+      require: mkl-threading=tbb_thread
