@@ -14,12 +14,12 @@ class H4iHipblas(CMakePackage):
     version('develop', branch='develop')
     version('main', branch='main')
 
-    # TODO do we need to specify that we're compiling with CHIP-SPV's hipcc?
+    depends_on('h4i-mklshim')
     depends_on('chip-spv')
 
     # By design, we can *only* be built using %clang.
-    # TODO is this really necessary?
-    # TODO Do we need to specify 'hipcc' from chip-spv?
+    # TODO Do we need to specify 'hipcc' from chip-spv?  Don't seem to.
+    # Do we need to be compiled with %clang at all?
     for curr_compiler in spack.compilers.supported_compilers():
         if curr_compiler != 'clang':
             conflicts(f'%{curr_compiler}')
