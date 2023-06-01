@@ -26,7 +26,7 @@ class ChipSpv(CMakePackage):
     for supported_version in [14, 15, 16]:
         with when(f'%clang@{supported_version}:{supported_version}.999'):
             depends_on(f'llvm@{supported_version}')
-            depends_on(f'spirv-llvm-translator@{supported_version}')
+            depends_on(f'spirv-llvm-translator@{supported_version}', type=('build', 'link', 'run'))
 
     depends_on('oneapi-level-zero', when='backend=level_zero')
     depends_on('ocl-icd', when='backend=opencl')
