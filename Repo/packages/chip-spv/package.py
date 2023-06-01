@@ -35,6 +35,8 @@ class ChipSpv(CMakePackage):
         depends_on('intel-oneapi-compilers')
         depends_on('intel-oneapi-mkl')
 
+    # Main branch puts HIP version header in wrong location.
+    patch('hip-version-header.patch', when='@main')
 
     def cmake_args(self):
 
@@ -59,4 +61,12 @@ class ChipSpv(CMakePackage):
             env.set('MKLROOT', self.spec['intel-oneapi-mkl'].prefix)
             env.prepend_path('PATH',
                 join_path(self.spec['intel-oneapi-compilers'].prefix, 'compiler', 'latest', 'linux', 'bin'))
+
+
+    def setup_dependent_build_environment(self, env, dependent_spec):
+
+        # For some reason, our dependency on spirv-llvm-translator with type=(build, link, run)
+        # doesn't seem to be sufficient for dependent packages to use llvm-spirv.
+        # TODO is there a more Spack-ic idiom for doing this?
+        env.prepend_path('PATH', join_path(self.spec["spirv-llvm-translator"].prefix.bin))
 
