@@ -26,33 +26,10 @@ class SpirvTools(CMakePackage):
             multi=False)
 
     depends_on('python@3')
+    depends_on('spirv-headers')
 
     conflicts('cxxstd=11', when='@:2023.1')
     conflicts('cxxstd=14', when='@:2023.2')
-
-    resource(
-            name='spirv-headers',
-            git='https://github.com/KhronosGroup/spirv-headers',
-            destination='external'
-    )
-    resource(
-            name='re2',
-            git='https://github.com/google/re2',
-            tag='2023-06-01',
-            destination='external'
-    )
-    resource(
-            name='effcee',
-            git='https://github.com/google/effcee',
-            # tag='v2019.1',    # Can't use even this newest tag because it hardcodes C++11, which breaks re2.
-            destination='external'
-    )
-    resource(
-            name='googletest',
-            git='https://github.com/google/googletest',
-            tag='v1.13.0',
-            destination='external'
-    )
 
     def cmake_args(self):
 
@@ -60,6 +37,8 @@ class SpirvTools(CMakePackage):
             self.define_from_variant('CMAKE_CXX_STANDARD', 'cxxstd'),
             '-DCMAKE_CXX_EXTENSIONS=OFF',
             '-DCMAKE_CXX_STANDARD_REQUIRED=ON',
+            f'-DSPIRV-Headers_SOURCE_DIR={self.spec["spirv-headers"].prefix}',
+            '-DSPIRV_SKIP_TESTS=ON',    # TODO consider supporting tests
         ]
 
         return args
