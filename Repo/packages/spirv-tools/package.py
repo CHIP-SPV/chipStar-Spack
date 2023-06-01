@@ -38,7 +38,7 @@ class SpirvTools(CMakePackage):
     resource(
             name='re2',
             git='https://github.com/google/re2',
-            tag='2023-03-01',
+            tag='2023-06-01',
             destination='external'
     )
     resource(
