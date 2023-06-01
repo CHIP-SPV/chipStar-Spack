@@ -24,3 +24,11 @@ class H4iHipblas(CMakePackage):
         if curr_compiler != 'clang':
             conflicts(f'%{curr_compiler}')
 
+    def cmake_args(self):
+
+        args = [
+            f'-DHIP_PATH={self.spec["chip-spv"].prefix}',
+        ]
+
+        return args
+
