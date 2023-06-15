@@ -11,7 +11,7 @@ class H4iHipblas(CMakePackage):
     # Maintainer of the Spack package, not necessarily the software itself.
     maintainers = ['rothpc']
 
-    version('develop', branch='develop')
+    version('develop', branch='develop', preferred=True)
     version('main', branch='main')
 
     depends_on('h4i-mklshim')

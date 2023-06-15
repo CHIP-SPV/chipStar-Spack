@@ -11,7 +11,7 @@ class H4iMklshim(CMakePackage):
     # Maintainer of the Spack package, not necessarily the software itself.
     maintainers = ['rothpc']
 
-    version('develop', branch='develop')
+    version('develop', branch='develop', preferred=True)
     version('main', branch='main')
 
     variant('mkl-threading',

@@ -12,7 +12,7 @@ class ChipSpv(CMakePackage):
     # Maintainer of the Spack package, not the software itself.
     maintainers = ['rothpc@ornl.gov']
 
-    version('main', branch='main', submodules=True)
+    version('main', branch='main', submodules=True, preferred=True)
     version('0.9', tag='v0.9', submodules=True)
 
     variant('backend', description='Which backend to target',
