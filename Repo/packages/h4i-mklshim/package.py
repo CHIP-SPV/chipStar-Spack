@@ -7,12 +7,14 @@ class H4iMklshim(CMakePackage):
 
     homepage = 'https://github.com/CHIP-SPV/H4I-MKLShim'
     git = 'https://github.com/CHIP-SPV/H4I-MKLShim'
+    url = 'https://github.com/CHIP-SPV/H4I-MKLShim/archive/refs/tags/v0.1.0.tar.gz'
 
     # Maintainer of the Spack package, not necessarily the software itself.
     maintainers = ['rothpc']
 
     version('develop', branch='develop', preferred=True)
-    version('main', branch='main')
+    version('master', branch='master')
+    version('0.1.0', sha256='5e76d4f12701a8dbb4abb79a4ad98a7e93249dd4802ad320b681f5c11fe7dbe7')
 
     variant('mkl-threading',
                 description='Which MKL threading mode to enable',
