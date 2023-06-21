@@ -119,6 +119,13 @@ update your environment to use the software, including:
 and module files have been generated for the software you built
 via this environment, `module load chip-spv`
 
+Note that you may need to modify your environment to be able to run
+programs produced using CHIP-SPV and the H4I libraries built
+using this Spack repository.  For instance, on some systems,
+one must load the `intel_compute_runtime` module before being
+able to run programs that use the Intel Level Zero runtime.
+
+
 # TODO
 
 * Clean up and verify the OpenCL-based environment.
