@@ -35,9 +35,6 @@ class ChipSpv(CMakePackage):
         depends_on('intel-oneapi-compilers')
         depends_on('intel-oneapi-mkl')
 
-    # Main branch puts HIP version header in wrong location.
-    patch('hip-version-header.patch', when='@main')
-
     def cmake_args(self):
 
         args = [
