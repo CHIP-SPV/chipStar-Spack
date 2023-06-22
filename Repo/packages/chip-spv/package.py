@@ -23,6 +23,11 @@ class ChipSpv(CMakePackage):
 
     variant('interop', description='Whether to build SYCL interoperability tests', default=True)
 
+    # By design, we can *only* be built using %clang.
+    for curr_compiler in spack.compilers.supported_compilers():
+        if curr_compiler != 'clang':
+            conflicts(f'%{curr_compiler}')
+
     for supported_version in [14, 15, 16]:
         with when(f'%clang@{supported_version}:{supported_version}.999'):
             depends_on(f'llvm@{supported_version}')

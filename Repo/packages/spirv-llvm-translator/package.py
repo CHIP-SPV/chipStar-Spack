@@ -12,6 +12,10 @@ class SpirvLlvmTranslator(CMakePackage):
     # Maintainer of the Spack package, not the software itself.
     maintainers = ['rothpc']
 
+    # By design, we can *only* be built using %clang.
+    for curr_compiler in spack.compilers.supported_compilers():
+        if curr_compiler != 'clang':
+            conflicts(f'%{curr_compiler}')
     supported_major_versions = [14, 15, 16]
     for curr_version in supported_major_versions:
         version(f'{curr_version}.0.0', tag=f'v{curr_version}.0.0')
