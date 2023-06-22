@@ -12,7 +12,7 @@ spack:
   repos:
   - ../../Repo
   packages:
-    chip-spv:
+    chipstar:
       require: '+interop backend=level_zero'
     spirv-tools:
       require: cxxstd=17

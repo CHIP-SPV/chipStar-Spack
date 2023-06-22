@@ -17,10 +17,10 @@ class H4iHipblas(CMakePackage):
     version('0.1.0', sha256='6f8cc622ad7c532eecb1d241e979496ef4471bc00a31845f11156531f9959273')
 
     depends_on('h4i-mklshim')
-    depends_on('chip-spv')
+    depends_on('chipstar')
 
     # By design, we can *only* be built using %clang.
-    # TODO Do we need to specify 'hipcc' from chip-spv?  Don't seem to.
+    # TODO Do we need to specify 'hipcc' from chipstar?  Don't seem to.
     # Do we need to be compiled with %clang at all?
     for curr_compiler in spack.compilers.supported_compilers():
         if curr_compiler != 'clang':
@@ -29,7 +29,7 @@ class H4iHipblas(CMakePackage):
     def cmake_args(self):
 
         args = [
-            f'-DHIP_PATH={self.spec["chip-spv"].prefix}',
+            f'-DHIP_PATH={self.spec["chipstar"].prefix}',
         ]
 
         return args

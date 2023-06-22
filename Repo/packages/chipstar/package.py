@@ -3,11 +3,11 @@
 import sys
 from spack import *
 
-class ChipSpv(CMakePackage):
+class Chipstar(CMakePackage):
 
-    homepage = 'https://github.com/CHIP-SPV/chip-spv'
-    git = 'https://github.com/CHIP-SPV/chip-spv'
-    url = 'https://github.com/CHIP-SPV/chip-spv/archive/refs/tags/v0.9.tar.gz'
+    homepage = 'https://github.com/CHIP-SPV/chipStar'
+    git = 'https://github.com/CHIP-SPV/chipStar'
+    url = 'https://github.com/CHIP-SPV/chipStar/archive/refs/tags/v0.9.tar.gz'
 
     # Maintainer of the Spack package, not the software itself.
     maintainers = ['rothpc@ornl.gov']

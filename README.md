@@ -4,15 +4,16 @@ See LICENSE.txt in the root of the source distribution for license info.
 -->
 # Overview
 
-[CHIP-SPV](https://github.com/CHIP-SPV/chip-spv) is software that
-allows software written to use the [Heterogeneous-compute Interface for
-Portability (HIP)](https://https://github.com/ROCm-Developer-Tools/HIP)
+[chipStar](https://github.com/CHIP-SPV/chipStar) (formerly CHIP-SPV)
+is software that allows software written to use the
+[Heterogeneous-compute Interface for Portability
+(HIP)](https://https://github.com/ROCm-Developer-Tools/HIP)
 interface and kernel language to target GPUs via the 
 [SPIR-V](https://registry.khronos.org/spir) intermediate language.
-CHIP-SPV can use either the Intel Level Zero runtime or an OpenCL
+chipStar can use either the Intel Level Zero runtime or an OpenCL
 runtime as a backend.
 
-This repository contains support for building CHIP-SPV and its
+This repository contains support for building chipStar and its
 dependencies via the [Spack](https://github.com/spack/spack) package
 manager.
 
@@ -29,7 +30,7 @@ the environment targeting the OpenCL backend to work.
   Versions 15 and 16 are best tested, but 14 might work.  We suggest
   installing the compiler via Spack (i.e., by installing something like
   `llvm@16.0.2` and then using `spack compiler add` with the llvm
-  package's install location), because the `chip-spv` package defined
+  package's install location), because the `chipstar` package defined
   in this repository depends on the `llvm` package anyway.
 * A recent (at least version 2023.1) Intel OneAPI compiler installation
   that is registered with Spack as a compiler.  The recommended way
@@ -51,7 +52,7 @@ $ git clone https://github.com/CHIP-SPV/CHIP-SPV-Spack
 ```
 
 2. Activate the environment you want to build.  E.g., for the
-environment that just builds CHIP-SPV with Level Zero backend:
+environment that just builds chipStar with Level Zero backend:
 
 ```bash
 $ cd CHIP-SPV-Spack/Environments/LevelZero
@@ -89,7 +90,7 @@ using `clang@15.0.7`, you may have to use a concretize command like the
 following:
 
 ```bash
-$ spack -c "packages:chip-spv:require:'%clang@15.0.7'" concretize -f -U
+$ spack -c "packages:chipstar:require:'%clang@15.0.7'" concretize -f -U
 ```
 
 As before, verify from the output of the `spack concretize` command that it
@@ -113,14 +114,14 @@ should show the packages that you just built.
 5. Use the installed software.  There are several ways you might
 update your environment to use the software, including:
 
-* `spack load chip-spv`
+* `spack load chipstar`
 * Activating the environment that you used to build the software
 * If your Spack configuration is such that it can generate module files
 and module files have been generated for the software you built
-via this environment, `module load chip-spv`
+via this environment, `module load chipstar`
 
 Note that you may need to modify your environment to be able to run
-programs produced using CHIP-SPV and the H4I libraries built
+programs produced using chipStar and the H4I libraries built
 using this Spack repository.  For instance, on some systems,
 one must load the `intel_compute_runtime` module before being
 able to run programs that use the Intel Level Zero runtime.
