@@ -7,12 +7,14 @@ class H4iHipblas(CMakePackage):
 
     homepage = 'https://github.com/CHIP-SPV/H4I-HipBLAS'
     git = 'https://github.com/CHIP-SPV/H4I-HipBLAS'
+    url = 'https://github.com/CHIP-SPV/H4I-HipBLAS/archive/refs/tags/v0.1.0.tar.gz'
 
     # Maintainer of the Spack package, not necessarily the software itself.
     maintainers = ['rothpc']
 
     version('develop', branch='develop', preferred=True)
     version('main', branch='main')
+    version('0.1.0', sha256='6f8cc622ad7c532eecb1d241e979496ef4471bc00a31845f11156531f9959273')
 
     depends_on('h4i-mklshim')
     depends_on('chip-spv')
