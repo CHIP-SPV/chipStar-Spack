@@ -6,12 +6,14 @@ class H4iExttest(CMakePackage):
 
     homepage = 'https://github.com/CHIP-SPV/H4I-ExtTest'
     git = 'https://github.com/CHIP-SPV/H4I-ExtTest'
+    url = 'https://github.com/CHIP-SPV/H4I-ExtTest/archive/refs/tags/v0.1.0.tar.gz'
 
     # Maintainer of the Spack package, not necessarily the software itself.
     maintainers = ['rothpc']
 
     version('develop', branch='develop', preferred=True)
     version('main', branch='main')
+    version('0.1.0', sha256='ca1db3f8e9f26e0c754d44c4dee860a499920845f399d5070beca46476211fe2')
 
     # We need a hipblas implementation.
     # Since hipblas is not a Spack virtual function,
