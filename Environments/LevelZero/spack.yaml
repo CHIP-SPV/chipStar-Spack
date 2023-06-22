@@ -2,10 +2,9 @@
 # See LICENSE.txt in the root of the source distribution for license info.
 spack:
   specs:
-  - chip-spv@main +interop backend=level_zero
-  - h4i-mklshim@develop
-  - h4i-hipblas@develop
-  - h4i-exttest@develop
+  - h4i-mklshim@0.1.0
+  - h4i-hipblas@0.1.0
+  - h4i-exttest@0.1.0
   view: true
   concretizer:
     unify: true
@@ -14,11 +13,11 @@ spack:
   - ../../Repo
   packages:
     chip-spv:
-      require: '%clang'
+      require: '+interop backend=level_zero'
     spirv-tools:
-      require: cxxstd=17 %clang
+      require: cxxstd=17
     spirv-llvm-translator:
-      require: +tools %clang
+      require: +tools
     intel-oneapi-compilers:
       require: '%gcc'
     intel-oneapi-mkl:
