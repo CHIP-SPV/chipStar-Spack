@@ -42,14 +42,31 @@ class Chipstar(CMakePackage):
 
     def cmake_args(self):
 
+        # Chipstar uses a heavily modified version of a HIP repository,
+        # which in turn uses an internal, modified version of Catch2 for tests that
+        # knows how to build HIP executables.
+        # Chipstar will not even configure correctly without using this modified Catch2,
+        # even if we aren't building tests.
+        # So force it to find its internal, modified Catch2.
+        # Note that this isn't necessarily simple: the Chipstar CMakeLists.txt files
+        # will define a variable CATCH2_PATH that makes one think it is where it will
+        # find Catch2, and the actual find_package() command specifies the internal
+        # path using a PATH keyword, but CMake treats that as a hint that is overridden
+        # if there's another Catch2 to be found using its higher-priority checks.
+        # Unfortunately for us, that's the case when building with Spack, if Catch2
+        # is already loaded or available in the environment.
+        internal_catch2_path = join_path(self.stage.source_path, 'HIP', 'tests', 'catch', 'external', 'Catch2', 'cmake', 'Catch2')
+
         args = [
             f'-DLLVM_CONFIG={join_path(self.spec["llvm"].prefix.bin, "llvm-config")}',
             f'-DLLVM_LINK={join_path(self.spec["llvm"].prefix.bin, "llvm-link")}',
             f'-DCLANG_OFFLOAD_BUNDLER={join_path(self.spec["llvm"].prefix.bin, "clang-offload-bundler")}',
-            f'-DLLVM_SPIRV_BINARY={join_path(self.spec["spirv-llvm-translator"].prefix.bin, "llvm-spirv")}'
+            f'-DLLVM_SPIRV_BINARY={join_path(self.spec["spirv-llvm-translator"].prefix.bin, "llvm-spirv")}',
+            f'-DCatch2_ROOT:PATH={internal_catch2_path}'
         ]
 
         return args
+
 
 
     def setup_build_environment(self, env):
