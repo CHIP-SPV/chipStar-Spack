@@ -2,9 +2,12 @@
 # See LICENSE.txt in the root of the source distribution for license info.
 spack:
   specs:
-  - h4i-mklshim@0.1.0
-  - h4i-hipblas@0.1.0
-  - h4i-exttest@0.1.0
+  - chipstar@main build_type=Debug
+  - h4i-mklshim@develop.fix_context build_type=Debug
+  - h4i-hiputils@develop build_type=Debug
+  - h4i-hipblas@develop.fix_context build_type=Debug
+  - h4i-hipsolver@develop.fix_context build_type=Debug
+  - h4i-exttest@develop build_type=Debug
   view: true
   concretizer:
     unify: true
