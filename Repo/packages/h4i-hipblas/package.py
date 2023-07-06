@@ -16,8 +16,9 @@ class H4iHipblas(CMakePackage):
     version('main', branch='main')
     version('0.1.0', sha256='6f8cc622ad7c532eecb1d241e979496ef4471bc00a31845f11156531f9959273')
 
-    depends_on('h4i-mklshim')
     depends_on('chipstar')
+    depends_on('h4i-mklshim')
+    depends_on('h4i-hiputils')
 
     # By design, we can *only* be built using %clang.
     # TODO Do we need to specify 'hipcc' from chipstar?  Don't seem to.
@@ -29,7 +30,7 @@ class H4iHipblas(CMakePackage):
     def cmake_args(self):
 
         args = [
-            f'-DHIP_PATH={self.spec["chipstar"].prefix}',
+            f'-DHIP_PATH={self.spec["chipstar"].prefix}'
         ]
 
         return args
