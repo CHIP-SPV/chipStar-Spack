@@ -22,6 +22,8 @@ class H4iExttest(CMakePackage):
     depends_on('hipblas', when='^hip')
     depends_on('h4i-hipblas', when='^chipstar')
 
+    depends_on('catch2@3')
+
     depends_on('boost +program_options')
 
     # By design, we can *only* be built using %clang.
@@ -30,4 +32,12 @@ class H4iExttest(CMakePackage):
     for curr_compiler in spack.compilers.supported_compilers():
         if curr_compiler != 'clang':
             conflicts(f'%{curr_compiler}')
+
+    def cmake_args(self):
+
+        args = [
+            f'-DHIP_PATH={self.spec["chipstar"].prefix}'
+        ]
+
+        return args
 
