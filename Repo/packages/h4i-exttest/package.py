@@ -15,20 +15,23 @@ class H4iExttest(CMakePackage):
     version('main', branch='main')
     version('0.1.0', sha256='ca1db3f8e9f26e0c754d44c4dee860a499920845f399d5070beca46476211fe2')
 
+    variant('rocm', description='Use ROCm libraries (e.g., hipBLAS)', default=False)
+
     depends_on('catch2@3')
-    depends_on('hipblas')
+    depends_on('hipblas', when='+rocm')
+    depends_on('h4i-hipblas', when='~rocm')
 
     # By design, we can *only* be built using %clang.
     # TODO is this really necessary?
     # TODO Do we need to specify 'hipcc' from chipStar?
-    for curr_compiler in spack.compilers.supported_compilers():
-        if curr_compiler != 'clang':
-            conflicts(f'%{curr_compiler}')
+    requires('%clang', '%cce', policy='one_of', msg='Package must be built with a Clang-based compiler')
+
 
     def cmake_args(self):
 
         args = [
-            f'-DHIP_PATH={self.spec["chipstar"].prefix}'
+            f'-DHIP_PATH={self.spec["chipstar"].prefix}',
+            self.define_from_variant('H4I_USE_ROCM_LIBS', 'rocm')
         ]
 
         return args
