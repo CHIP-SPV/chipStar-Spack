@@ -16,11 +16,6 @@ class H4iHipblas(CMakePackage):
     version('main', branch='main')
     version('0.1.0', sha256='6f8cc622ad7c532eecb1d241e979496ef4471bc00a31845f11156531f9959273')
 
-    # We provide the HipBLAS interface.
-    # Even though there's a "real" hipblas Spack package, Spack
-    # seems to be OK with us saying that we provide it also.
-    provides('hipblas')
-
     depends_on('chipstar')
     depends_on('h4i-mklshim')
     depends_on('h4i-hiputils')
