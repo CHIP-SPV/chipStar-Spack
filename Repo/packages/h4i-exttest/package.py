@@ -15,16 +15,8 @@ class H4iExttest(CMakePackage):
     version('main', branch='main')
     version('0.1.0', sha256='ca1db3f8e9f26e0c754d44c4dee860a499920845f399d5070beca46476211fe2')
 
-    # We need a hipblas implementation.
-    # Since hipblas is not a Spack virtual function,
-    # we condition our dependency on which implementation
-    # by whether we indirectly depend on HIP or chipStar.
-    depends_on('hipblas', when='^hip')
-    depends_on('h4i-hipblas', when='^chipstar')
-
     depends_on('catch2@3')
-
-    depends_on('boost +program_options')
+    depends_on('hipblas')
 
     # By design, we can *only* be built using %clang.
     # TODO is this really necessary?
