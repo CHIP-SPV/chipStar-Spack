@@ -34,7 +34,7 @@ class Chipstar(CMakePackage):
             depends_on(f'spirv-llvm-translator@{supported_version}', type=('build', 'link', 'run'))
 
     depends_on('oneapi-level-zero', when='backend=level_zero')
-    depends_on('ocl-icd', when='backend=opencl')
+    depends_on('opencl', when='backend=opencl')
 
     with when('+interop'):
         depends_on('intel-oneapi-compilers')
