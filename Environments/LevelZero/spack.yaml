@@ -24,6 +24,6 @@ spack:
     intel-oneapi-compilers:
       require: '%gcc'
     intel-oneapi-mkl:
-      require: ^intel-oneapi-tbb
+      require: 'threads=tbb ^intel-oneapi-tbb'
     h4i-mklshim:
       require: mkl-threading=tbb_thread
