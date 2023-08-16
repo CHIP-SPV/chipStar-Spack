@@ -15,10 +15,18 @@ class H4iExttest(CMakePackage, ROCmPackage):
     version('main', branch='main')
     version('0.1.0', sha256='ca1db3f8e9f26e0c754d44c4dee860a499920845f399d5070beca46476211fe2')
 
+    # TODO consider whether to add variant for each library to allow
+    # control of whether to search for and build tests that use the library.
     depends_on('catch2@3')
-    depends_on('hip', when='+rocm')
-    depends_on('hipblas', when='+rocm')
-    depends_on('h4i-hipblas', when='~rocm')
+
+    with when('+rocm'):
+        depends_on('hip')
+        depends_on('hipblas')
+        depends_on('hipsolver')
+
+    with when('~rocm'):
+        depends_on('h4i-hipblas')
+        depends_on('h4i-hipsolver')
 
     requires('%clang', '%cce', policy='one_of', msg='Package must be built with a Clang-based compiler')
 
